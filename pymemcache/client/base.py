@@ -255,7 +255,7 @@ class Client(object):
         self.default_noreply = default_noreply
         self.allow_unicode_keys = allow_unicode_keys
 
-    def check_key(self, key):
+    def check_key(self, key: str):
         """Checks key and add key_prefix."""
         return _check_key(key, allow_unicode_keys=self.allow_unicode_keys,
                           key_prefix=self.key_prefix)
@@ -282,7 +282,7 @@ class Client(object):
 
         self.sock = sock
 
-    def close(self):
+    def close(self) -> None:
         """Close the connection to memcached, if it is open. The next call to a
         method that requires a connection will re-open it."""
         if self.sock is not None:
@@ -293,7 +293,8 @@ class Client(object):
             finally:
                 self.sock = None
 
-    def set(self, key, value, expire=0, noreply=None):
+    def set(self, key:str, value:str,
+            expire: int=0, noreply: bool=None) -> bool:
         """
         The memcached "set" command.
 
@@ -314,7 +315,8 @@ class Client(object):
             noreply = self.default_noreply
         return self._store_cmd(b'set', {key: value}, expire, noreply)[key]
 
-    def set_many(self, values, expire=0, noreply=None):
+    def set_many(self, values: dict,
+                 expire: int=0, noreply: bool=None) -> list:
         """
         A convenience function for setting multiple values.
 
@@ -337,7 +339,8 @@ class Client(object):
 
     set_multi = set_many
 
-    def add(self, key, value, expire=0, noreply=None):
+    def add(self, key: str, value: str,
+            expire: int=0, noreply: bool=None) -> bool:
         """
         The memcached "add" command.
 
@@ -358,7 +361,8 @@ class Client(object):
             noreply = self.default_noreply
         return self._store_cmd(b'add', {key: value}, expire, noreply)[key]
 
-    def replace(self, key, value, expire=0, noreply=None):
+    def replace(self, key: str, value: str,
+                expire: int=0, noreply: bool=None) -> bool:
         """
         The memcached "replace" command.
 
@@ -379,7 +383,8 @@ class Client(object):
             noreply = self.default_noreply
         return self._store_cmd(b'replace', {key: value}, expire, noreply)[key]
 
-    def append(self, key, value, expire=0, noreply=None):
+    def append(self, key: str, value: str,
+               expire: int=0, noreply: bool=None) -> bool:
         """
         The memcached "append" command.
 
@@ -398,7 +403,8 @@ class Client(object):
             noreply = self.default_noreply
         return self._store_cmd(b'append', {key: value}, expire, noreply)[key]
 
-    def prepend(self, key, value, expire=0, noreply=None):
+    def prepend(self, key: str, value: str,
+                expire: int=0, noreply: bool=None) -> bool:
         """
         The memcached "prepend" command.
 
@@ -417,7 +423,8 @@ class Client(object):
             noreply = self.default_noreply
         return self._store_cmd(b'prepend', {key: value}, expire, noreply)[key]
 
-    def cas(self, key, value, cas, expire=0, noreply=False):
+    def cas(self, key: str, value: str, cas: str,
+            expire: int=0, noreply: bool=False) -> bool:
         """
         The memcached "cas" command.
 
@@ -436,7 +443,7 @@ class Client(object):
         """
         return self._store_cmd(b'cas', {key: value}, expire, noreply, cas)[key]
 
-    def get(self, key, default=None):
+    def get(self, key: str, default: str=None) -> str:
         """
         The memcached "get" command, but only for one key, as a convenience.
 
@@ -449,7 +456,7 @@ class Client(object):
         """
         return self._fetch_cmd(b'get', [key], False).get(key, default)
 
-    def get_many(self, keys):
+    def get_many(self, keys: list) -> dict:
         """
         The memcached "get" command.
 
@@ -468,7 +475,8 @@ class Client(object):
 
     get_multi = get_many
 
-    def gets(self, key, default=None, cas_default=None):
+    def gets(self, key: list,
+             default: str=None, cas_default: str=None) -> tuple:
         """
         The memcached "gets" command for one key, as a convenience.
 
@@ -484,7 +492,7 @@ class Client(object):
         defaults = (default, cas_default)
         return self._fetch_cmd(b'gets', [key], True).get(key, defaults)
 
-    def gets_many(self, keys):
+    def gets_many(self, keys: str) -> dict:
         """
         The memcached "gets" command.
 
@@ -501,7 +509,7 @@ class Client(object):
 
         return self._fetch_cmd(b'gets', keys, True)
 
-    def delete(self, key, noreply=None):
+    def delete(self, key: str, noreply: bool=None) -> bool:
         """
         The memcached "delete" command.
 
@@ -525,7 +533,7 @@ class Client(object):
             return True
         return results[0] == b'DELETED'
 
-    def delete_many(self, keys, noreply=None):
+    def delete_many(self, keys: str, noreply: bool=None) -> bool:
         """
         A convenience function to delete multiple keys.
 
@@ -557,7 +565,7 @@ class Client(object):
 
     delete_multi = delete_many
 
-    def incr(self, key, value, noreply=False):
+    def incr(self, key: str, value: int, noreply: bool=False) -> int:
         """
         The memcached "incr" command.
 
@@ -582,7 +590,7 @@ class Client(object):
             return None
         return int(results[0])
 
-    def decr(self, key, value, noreply=False):
+    def decr(self, key: str, value: int, noreply: bool=False) -> int:
         """
         The memcached "decr" command.
 
@@ -607,7 +615,7 @@ class Client(object):
             return None
         return int(results[0])
 
-    def touch(self, key, expire=0, noreply=None):
+    def touch(self, key: str, expire: int=0, noreply: bool=None) -> bool:
         """
         The memcached "touch" command.
 
@@ -634,7 +642,7 @@ class Client(object):
             return True
         return results[0] == b'TOUCHED'
 
-    def stats(self, *args):
+    def stats(self, *args: list) -> dict:
         """
         The memcached "stats" command.
 
@@ -660,7 +668,7 @@ class Client(object):
 
         return result
 
-    def cache_memlimit(self, memlimit):
+    def cache_memlimit(self, memlimit: int) -> bool:
         """
         The memcached "cache_memlimit" command.
 
@@ -675,7 +683,7 @@ class Client(object):
         self._fetch_cmd(b'cache_memlimit', [str(int(memlimit))], False)
         return True
 
-    def version(self):
+    def version(self) -> str:
         """
         The memcached "version" command.
 
@@ -691,7 +699,7 @@ class Client(object):
                 "Received unexpected response: %s" % results[0])
         return after
 
-    def flush_all(self, delay=0, noreply=None):
+    def flush_all(self, delay: int=0, noreply: bool=None) -> bool:
         """
         The memcached "flush_all" command.
 
@@ -715,7 +723,7 @@ class Client(object):
             return True
         return results[0] == b'OK'
 
-    def quit(self):
+    def quit(self) -> None:
         """
         The memcached "quit" command.
 

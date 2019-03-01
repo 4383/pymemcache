@@ -38,3 +38,8 @@ class MemcacheUnknownError(MemcacheError):
 class MemcacheUnexpectedCloseError(MemcacheServerError):
     "Raised when the connection with memcached closes unexpectedly."
     pass
+
+
+class MemcacheCommandsError(MemcacheError):
+    "Raised when the CLI or the dynamic interpreter facing an error."
+    pass
