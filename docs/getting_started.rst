@@ -106,6 +106,56 @@ Deserialization with Python 3
             return json.loads(value.decode('utf-8'))
         raise Exception("Unknown serialization format")
 
+
+Using the CLI
+-------------
+
+Pymemcache provide a CLI which can use as an interpreter who you can
+interact with:
+
+.. code-block:: shell
+
+   $ pymemcache --host 0.0.0.0
+   Pymemcache CLI 2.2.0
+   Connected to 0.0.0.0:11211
+   Memcache server version: 1.5.12
+   >
+
+CLI initialize a base pymemcache Client and lets you interact with him.
+Most of :py:class:`pymemcache.client.base.Client` methods are availables 
+from command line excepted :func:`pymemcache.client.base.Client.get_many`.
+
+You can also pass command directly from CLI parameters and get output directly:
+
+.. code-block:: shell
+
+   $ pymemcache --host 0.0.0.0 -c "add test test-value"
+   True
+   $ pymemcache --host 0.0.0.0 -c "add test test-value"
+   Pymemcache CLI 2.2.0
+   Connected to 0.0.0.0:11211
+   Memcache server version: 1.5.12
+   Usage (add): key, value, expire=0, noreply=None
+   Description:
+   
+   The memcached "add" command.
+   
+   Args:
+     key: str, see class docs for details.
+     value: str, see class docs for details.
+     expire: optional int, number of seconds until the item is expired
+             from the cache, or zero for no expiry (the default).
+     noreply: optional bool, True to not wait for the reply (defaults to
+              self.default_noreply).
+   
+   Returns:
+     If noreply is True, the return value is always True. Otherwise the
+     return value is True if the value was stored, and False if it was
+     not (because the key already existed).
+
+Interpreter/CLI can be useful during debug session or to dig into your server
+manually.
+
 Key Constraints
 ---------------
 This client implements the ASCII protocol of memcached. This means keys should not
