@@ -287,6 +287,10 @@ class HashClient(object):
 
     def _run_cmd(self, cmd, key, default_val, *args, **kwargs):
         client = self._get_client(key)
+        print("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{")
+        print("pymem client")
+        print(client.server)
+        print("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{")
 
         if client is None:
             return default_val
@@ -315,6 +319,7 @@ class HashClient(object):
         return succeeded, failed, None
 
     def set(self, key, *args, **kwargs):
+        print("pymemcache here")
         return self._run_cmd('set', key, False, *args, **kwargs)
 
     def get(self, key, *args, **kwargs):

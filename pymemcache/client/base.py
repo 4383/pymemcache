@@ -286,6 +286,7 @@ class Client(object):
                                              self.socket_module.SOCK_STREAM)
         try:
             sock.settimeout(self.connect_timeout)
+            print(self.server)
             sock.connect(self.server)
             sock.settimeout(self.timeout)
             if self.no_delay and sock.family == self.socket_module.AF_INET:
